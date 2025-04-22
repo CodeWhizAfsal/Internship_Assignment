@@ -32,7 +32,6 @@ The pipeline outputs:
 - **Python 3.x**
 - **OpenCV** (for image processing)
 - **ORB-SLAM3** (for visual SLAM)
-- **Open3D** (for 3D visualization)
 - **CloudCompare** (optional, for point cloud visualization)
 
 ### Install Required Python Libraries
@@ -79,14 +78,15 @@ Extract frames from the input video:
 ### Run SLAM
 
 Process the frames and run the ORB-SLAM3 pipeline:
+![Map Viewer Output](resources/map_viewer.png)
 
-
+![Current Frame](resources/a.png)
 ### Generate and Visualize Point Cloud
 
 Save the generated point cloud for visualization:
 
 
-You can visualize the point cloud using CloudCompare or Open3D:
+You can visualize the point cloud using CloudCompare.
 
 
 ## Pose Localization in Point Cloud
@@ -96,6 +96,7 @@ To visualize the robot's pose within the 3D map:
 
 This will display the robot's estimated position in the point cloud for each frame.
 
+![CloudCompare Output](resources/b.png)
 ## Assumptions
 
 - The input is from a single monocular camera with known calibration.
