@@ -67,12 +67,36 @@ Build ORB-SLAM3 with the appropriate dependencies for monocular vision as per th
 
 ## File Structure
 
+```
+INTERNSHIP_ASSIGNMENT/
+│
+├── Algorithm/
+│   ├── KeyFrameTrajectory.txt
+│   └── run_slam.py
+│
+├── Extract_Frames/
+│   └── extract_frames.py
+│
+├── resources/
+│   ├── a.png
+│   ├── b.png
+│   ├── camera.yaml
+│   └── map_viewer.png
+│
+├── Trajectory/
+│   ├── convert.py
+│   └── trajectory.ply
+│
+├── KeyFrameTrajectory.txt
+└── README.md
+```
 
 ## Execution
 
 ### Extract Frames from Video
 
 Extract frames from the input video:
+![Sample Frame](resources/frame_00001.png)
 
 
 ### Run SLAM
