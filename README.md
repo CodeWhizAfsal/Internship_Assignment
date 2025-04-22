@@ -1,124 +1,115 @@
-text
 # Monocular Visual SLAM for Robot Localization and 3D Mapping
 
-This project implements a Monocular Visual SLAM pipeline to localize a robot's position, generate a 3D point cloud of the environment, and visualize the robot's pose within the generated map. Uses **ORB-SLAM3** for feature-based localization with **Open3D** and **CloudCompare** for visualization.
-
-![SLAM Pipeline](https://example.com/slam-pipeline.jpg) <!-- Add actual image path -->
+This project implements a Monocular Visual SLAM pipeline to localize a robot's position, generate a 3D point cloud of the environment, and visualize the robot's pose within the generated map. It uses **ORB-SLAM3** for feature-based localization, with **Open3D** and **CloudCompare** for visualization.
 
 ## Table of Contents
+
 - [Project Overview](#project-overview)
 - [Dependencies](#dependencies)
 - [Setup Instructions](#setup-instructions)
 - [File Structure](#file-structure)
 - [Execution](#execution)
-- [Pose Localization](#pose-localization-in-point-cloud)
+  - [Extract Frames from Video](#extract-frames-from-video)
+  - [Run SLAM](#run-slam)
+  - [Generate and Visualize Point Cloud](#generate-and-visualize-point-cloud)
+- [Pose Localization in Point Cloud](#pose-localization-in-point-cloud)
 - [Assumptions](#assumptions)
 - [License](#license)
 
 ## Project Overview
-Processes monocular video input to:
-1. Extract video frames
-2. Run ORB-SLAM3 for pose estimation
-3. Generate 3D environment point cloud
-4. Visualize robot trajectory in 3D map
 
-Output:  
-✅ 3D Point Cloud (.ply)  
-✅ Robot Trajectory Data (.txt)  
-✅ Pose Visualization in 3D Map
+Visual SLAM (Simultaneous Localization and Mapping) enables robots to build a map of an unknown environment while simultaneously tracking their own position using visual data from cameras. Monocular visual SLAM processes images from a single camera to estimate motion and reconstruct the surroundings in 3D. The core steps include feature extraction, pose estimation, and map building.
+
+This project uses **ORB-SLAM3**, a state-of-the-art open-source SLAM system capable of real-time operation with monocular, stereo, and RGB-D cameras. ORB-SLAM3 extracts ORB features from video frames, tracks these features across frames to estimate the camera's trajectory, and triangulates 3D positions to build a sparse point cloud map of the environment. The system also supports loop closure to correct drift and optimize the map for accuracy.
+
+The pipeline outputs:
+- A 3D point cloud representing the environment
+- The robot/camera's estimated trajectory
+- Visualization tools for analysis
 
 ## Dependencies
 
-### Core Requirements
-- Python 3.8+
-- OpenCV 4.5+
-- ORB-SLAM3 (built from source)
-- Open3D 0.15+
-- CloudCompare (optional)
+- **Python 3.x**
+- **OpenCV** (for image processing)
+- **ORB-SLAM3** (for visual SLAM)
+- **Open3D** (for 3D visualization)
+- **CloudCompare** (optional, for point cloud visualization)
 
-### Python Packages
-pip install opencv-python opencv-contrib-python open3d numpy
+### Install Required Python Libraries
 
-text
 
 ### ORB-SLAM3 Setup
-1. Clone official repository:
-git clone https://github.com/UZ-SLAMLab/ORB_SLAM3.git
 
-text
-2. Follow build instructions in ORB-SLAM3 documentation
+Clone the official ORB-SLAM3 repository and follow its documentation for building and configuration.
+
+
+Build ORB-SLAM3 with the appropriate dependencies for monocular vision as per the [official instructions](https://github.com/UZ-SLAMLab/ORB_SLAM3).
 
 ## Setup Instructions
-1. Clone this repository:
-git clone https://github.com/yourusername/Internship_Assignment.git
-cd Internship_Assignment
 
-text
-2. Install requirements:
-pip install -r requirements.txt
+1. **Clone this repository:**
 
-text
-3. Place input video in project root (rename to `video_input.mp4`)
+    ```
+    git clone https://github.com/yourusername/Internship_Assignment.git
+    cd Internship_Assignment
+    ```
+
+2. **Install dependencies:**
+
+    ```
+    pip install -r requirements.txt
+    ```
+
+3. **Set up ORB-SLAM3:**  
+   Follow the official instructions to build and configure ORB-SLAM3 for monocular vision.
+
+4. **Prepare input video:**  
+   Place your monocular video file (e.g., `video_input.mp4`) in the project directory.
 
 ## File Structure
-Internship_Assignment/
-├── frames/ # Extracted video frames
-├── results/ # Output files
-│ ├── trajectory.ply # 3D point cloud
-│ └── KeyFrameTrajectory.txt # Pose data
-├── config/
-│ └── mono_camera.yaml # Camera calibration
-├── video_input.mp4 # Input video
-└── scripts/ # Core functionality scripts
 
-text
 
 ## Execution
 
-### 1. Extract Video Frames
-python extract_frames.py
---video_path video_input.mp4
---output_folder frames/
+### Extract Frames from Video
 
-text
+Extract frames from the input video:
 
-### 2. Run SLAM Pipeline
-python run_slam.py
---frame_folder frames/
---config_path config/mono_camera.yaml
 
-text
+### Run SLAM
 
-### 3. Generate Point Cloud
-python save_point_cloud.py
---slam_output results/
---output_ply trajectory.ply
+Process the frames and run the ORB-SLAM3 pipeline:
 
-text
 
-### 4. Visualize Results
-- Open `trajectory.ply` in CloudCompare
-- Use Open3D for interactive visualization:
-import open3d as o3d
-pcd = o3d.io.read_point_cloud("results/trajectory.ply")
-o3d.visualization.draw_geometries([pcd])
+### Generate and Visualize Point Cloud
 
-text
+Save the generated point cloud for visualization:
+
+
+You can visualize the point cloud using CloudCompare or Open3D:
+
 
 ## Pose Localization in Point Cloud
-Visualize robot trajectory in generated 3D map:
-python localization.py
---point_cloud_file results/trajectory.ply
---pose_file results/KeyFrameTrajectory.txt
 
-text
+To visualize the robot's pose within the 3D map:
+
+
+This will display the robot's estimated position in the point cloud for each frame.
 
 ## Assumptions
-1. Monocular camera input with known calibration parameters
-2. Video contains sufficient texture for feature matching
-3. Camera operates at 30 FPS (adjustable in config)
-4. Environment has static lighting conditions
-5. No sudden camera motions (>30° rotation/frame)
+
+- The input is from a single monocular camera with known calibration.
+- ORB-SLAM3 is used for feature extraction, matching, and localization.
+- Pose data format: `[time, x, y, z, qx, qy, qz, qw]` (position and orientation as quaternion).
+- Point cloud and pose localization use nearest-neighbor matching.
+- Input video and frames are pre-processed and synchronized with the SLAM pipeline.
 
 ## License
-MIT License - See [LICENSE](LICENSE) for details.
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+---
+
+**References:**  
+- ORB-SLAM3: An Accurate Open-Source Library for Visual, Visual-Inertial and Multi-Map SLAM  
+- Visual SLAM overview and applications in robotics
